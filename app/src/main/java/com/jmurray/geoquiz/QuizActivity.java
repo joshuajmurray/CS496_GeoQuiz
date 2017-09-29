@@ -76,7 +76,6 @@ public class QuizActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = (mQuestionBank.length - 1);//wraps around to end of array
                 }
-//                Toast.makeText(getApplicationContext(), Integer.toString(mCurrentIndex), Toast.LENGTH_SHORT).show();
                 updateQuestion();
             }
         });
