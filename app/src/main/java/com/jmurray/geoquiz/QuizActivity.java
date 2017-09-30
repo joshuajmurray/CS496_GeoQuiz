@@ -29,9 +29,10 @@ public class QuizActivity extends AppCompatActivity {
             new Question(R.string.question_asia, true),
     };
 
-    private int[] buttonStatus = new int[] {1,1,1,1,1,1};
+    private int[] mButtonStatus = new int[] {1,1,1,1,1,1};
 
     private int mCurrentIndex = 0;
+    private float mTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +131,22 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void updateEnabled() {
-        if(buttonStatus[mCurrentIndex] != 1){
+        if(mButtonStatus[mCurrentIndex] != 1){
             mTrueButton.setEnabled(false);
             mFalseButton.setEnabled(false);
         }else {
             mTrueButton.setEnabled(true);
             mFalseButton.setEnabled(true);
+        }
+    }
+
+    private void checkComplete(){
+        int sum = 0;
+        int percentCorrect = 0;
+        for (int e : mButtonStatus) sum += e;// sum the array values
+        if(sum == 0 ) {
+            percentCorrect = (int)(mTotal/mQuestionBank.length);//cast to int and get rid of decimals
+            Toast.makeText(this, percentCorrect + "% Correct", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -146,13 +157,15 @@ public class QuizActivity extends AppCompatActivity {
 
         if(userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
+            mTotal += 100;
         } else {
             messageResId = R.string.incorrect_toast;
         }
 
-        buttonStatus[mCurrentIndex] = 0;
+        mButtonStatus[mCurrentIndex] = 0;
         updateEnabled();
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+        checkComplete();
     }
 }
