@@ -29,6 +29,8 @@ public class QuizActivity extends AppCompatActivity {
             new Question(R.string.question_asia, true),
     };
 
+    private int[] buttonStatus = new int[] {1,1,1,1,1,1};
+
     private int mCurrentIndex = 0;
 
     @Override
@@ -64,6 +66,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                updateEnabled();
             }
         });
 
@@ -77,6 +80,7 @@ public class QuizActivity extends AppCompatActivity {
                     mCurrentIndex = (mQuestionBank.length - 1);//wraps around to end of array
                 }
                 updateQuestion();
+                updateEnabled();
             }
         });
 
@@ -125,6 +129,16 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextView.setText(question);
     }
 
+    private void updateEnabled() {
+        if(buttonStatus[mCurrentIndex] != 1){
+            mTrueButton.setEnabled(false);
+            mFalseButton.setEnabled(false);
+        }else {
+            mTrueButton.setEnabled(true);
+            mFalseButton.setEnabled(true);
+        }
+    }
+
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
@@ -135,6 +149,9 @@ public class QuizActivity extends AppCompatActivity {
         } else {
             messageResId = R.string.incorrect_toast;
         }
+
+        buttonStatus[mCurrentIndex] = 0;
+        updateEnabled();
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
