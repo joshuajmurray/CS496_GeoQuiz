@@ -100,7 +100,7 @@ public class CheatActivity extends AppCompatActivity {
 
     private void setAnswerShownResult(boolean isAnswerShown) {
         if(isAnswerShown) {
-            mShown = true;
+            mShown = true;//allows state to be saved if there wasn't a saved state already
         }
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
