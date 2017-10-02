@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
 
     private static final String TAG = "CheatActivity";
-    private static final String KEY_INDEX = "index";
+    private static final String KEY_INDEX = "status";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.jmurray.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.jmurray.geoquiz.answer_shown";
 
@@ -34,11 +34,8 @@ public class CheatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_cheat);
-
-        if(savedInstanceState != null) {
-            mShown = savedInstanceState.getBoolean(KEY_INDEX, false);
-        }
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
@@ -56,6 +53,30 @@ public class CheatActivity extends AppCompatActivity {
                 setAnswerShownResult(true);
             }
         });
+
+        if(savedInstanceState != null) {
+            mShown = savedInstanceState.getBoolean(KEY_INDEX, false);
+            setAnswerShownResult(mShown);
+            mShowAnswerButton.performClick();//calls the anonymous function for showAnswerButton's onClick listener
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
     }
 
     @Override
@@ -63,6 +84,18 @@ public class CheatActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putBoolean(KEY_INDEX, mShown);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
     }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
