@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
+    private static final String TAG = "CheatActivity";
+    private static final String KEY_INDEX = "index";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.jmurray.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.jmurray.geoquiz.answer_shown";
 
     private boolean mAnswerIsTrue;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
+    private boolean mShown = false;
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
         Intent intent = new Intent(packageContext, CheatActivity.class);
@@ -32,6 +35,10 @@ public class CheatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
+
+        if(savedInstanceState != null) {
+            mShown = savedInstanceState.getBoolean(KEY_INDEX, false);
+        }
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
@@ -51,8 +58,17 @@ public class CheatActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putBoolean(KEY_INDEX, mShown);
+    }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
+        if(isAnswerShown) {
+            mShown = true;
+        }
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
