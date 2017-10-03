@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
 
     private static final String TAG = "CheatActivity";
-    private static final String KEY_INDEX = "status";
+    private static final String KEY_STATUS = "status";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.jmurray.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.jmurray.geoquiz.answer_shown";
 
@@ -55,7 +55,7 @@ public class CheatActivity extends AppCompatActivity {
         });
 
         if(savedInstanceState != null) {
-            mShown = savedInstanceState.getBoolean(KEY_INDEX, false);
+            mShown = savedInstanceState.getBoolean(KEY_STATUS, false);
             setAnswerShownResult(mShown);
             mShowAnswerButton.performClick();//calls the anonymous function for showAnswerButton's onClick listener
         }
@@ -83,7 +83,7 @@ public class CheatActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
-        savedInstanceState.putBoolean(KEY_INDEX, mShown);
+        savedInstanceState.putBoolean(KEY_STATUS, mShown);
     }
 
     @Override
