@@ -28,14 +28,13 @@ public class QuizActivity extends AppCompatActivity {
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[] {
-            new Question(R.string.question_australia, true),
-            new Question(R.string.question_oceans, true),
-            new Question(R.string.question_mideast, false),
-            new Question(R.string.question_africa, false),
-            new Question(R.string.question_americas, true),
-            new Question(R.string.question_asia, true),
+            new Question(R.string.question_australia, true, false),
+            new Question(R.string.question_oceans, true, false),
+            new Question(R.string.question_mideast, false, false),
+            new Question(R.string.question_africa, false, false),
+            new Question(R.string.question_americas, true, false),
+            new Question(R.string.question_asia, true, false),
     };
-    private boolean[] cheatRecord = new boolean[]{false,false,false,false,false,false};
 
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
@@ -49,7 +48,7 @@ public class QuizActivity extends AppCompatActivity {
         if(savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             mIsCheater = savedInstanceState.getBoolean(KEY_STATUS, false);
-            cheatRecord = savedInstanceState.getBooleanArray(KEY_CHEATS);
+            mQuestionBank = (Question[]) savedInstanceState.getSerializable(KEY_CHEATS);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -74,7 +73,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                mIsCheater = cheatRecord[mCurrentIndex];
+                mIsCheater = mQuestionBank[mCurrentIndex].isCheater();
                 updateQuestion();
             }
         });
@@ -88,7 +87,7 @@ public class QuizActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = (mQuestionBank.length - 1);//wraps around to end of array
                 }
-                mIsCheater = cheatRecord[mCurrentIndex];
+                mIsCheater = mQuestionBank[mCurrentIndex].isCheater();
                 updateQuestion();
             }
         });
@@ -118,7 +117,7 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
-            cheatRecord[mCurrentIndex] = mIsCheater;
+            mQuestionBank[mCurrentIndex].setCheater(mIsCheater);
         }
     }
 
@@ -146,7 +145,8 @@ public class QuizActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
         savedInstanceState.putBoolean(KEY_STATUS, mIsCheater);
-        savedInstanceState.putBooleanArray(KEY_CHEATS, cheatRecord);
+        savedInstanceState.putSerializable(KEY_CHEATS, mQuestionBank);
+        Log.i(TAG, "onSaveInstanceStateRAN");
     }
 
     @Override
