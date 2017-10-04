@@ -75,7 +75,6 @@ public class CheatActivity extends AppCompatActivity {
         });
     }
 
-
     private void setAnswerShownResult(boolean isAnswerShown) {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);

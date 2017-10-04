@@ -2,6 +2,7 @@ package com.jmurray.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mCheatButton;
 
     private TextView mQuestionTextView;
+    private TextView mCheatTokenTextView;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -36,7 +38,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
-    private int mCheatCount = 0;
+    private int mCheatCount = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+
+        mCheatTokenTextView = (TextView) findViewById(R.id.cheat_tokens_text_view);
+        mCheatTokenTextView.setText("Cheat Tokens Left " + Integer.toString(mCheatCount));
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener(){
@@ -161,11 +166,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-
         int messageResId = 0;
         if(mIsCheater){
             messageResId = R.string.judgement_toast;
-            mCheatCount++;
         } else {
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
@@ -173,7 +176,19 @@ public class QuizActivity extends AppCompatActivity {
                 messageResId = R.string.incorrect_toast;
             }
         }
-
+        setCheatToken();
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setCheatToken() {
+        if(mIsCheater) {
+            mCheatCount--;
+        }
+        if(mCheatCount >= 3) {
+            mCheatButton.setVisibility(View.INVISIBLE);
+        } else {
+            mCheatButton.setVisibility(View.VISIBLE);
+        }
+        mCheatTokenTextView.setText("Cheat Tokens Left " + Integer.toString(mCheatCount));
     }
 }
