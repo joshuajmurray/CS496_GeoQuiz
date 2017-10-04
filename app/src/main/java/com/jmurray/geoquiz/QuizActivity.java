@@ -36,6 +36,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
+    private int mCheatCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +165,7 @@ public class QuizActivity extends AppCompatActivity {
         int messageResId = 0;
         if(mIsCheater){
             messageResId = R.string.judgement_toast;
+            mCheatCount++;
         } else {
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
