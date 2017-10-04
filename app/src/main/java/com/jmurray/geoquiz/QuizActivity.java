@@ -119,6 +119,10 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
+            if(mIsCheater) {
+                mCheatCount--;
+            }
+            setCheatToken();
         }
     }
 
@@ -181,10 +185,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void setCheatToken() {
-        if(mIsCheater) {
-            mCheatCount--;
-        }
-        if(mCheatCount >= 3) {
+        if(mCheatCount <= 0) {
             mCheatButton.setVisibility(View.INVISIBLE);
         } else {
             mCheatButton.setVisibility(View.VISIBLE);
